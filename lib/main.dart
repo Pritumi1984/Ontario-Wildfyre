@@ -30,50 +30,48 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
         title: Text('Ontario Wildfire Dashboard'),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedTab = 'Current Situation';
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedTab == 'Current Situation' ? Colors.red : Colors.grey,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedTab = 'Current Situation';
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: selectedTab == 'Current Situation' ? Colors.red : Colors.grey,
+                    ),
+                    child: Text('Current Situation'),
                   ),
-                  child: Text('Current Situation'),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedTab = 'Totals This Year';
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedTab == 'Totals This Year' ? Colors.red : Colors.grey,
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedTab = 'Totals This Year';
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: selectedTab == 'Totals This Year' ? Colors.red : Colors.grey,
+                    ),
+                    child: Text('Totals This Year'),
                   ),
-                  child: Text('Totals This Year'),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: selectedTab == 'Current Situation'
-                    ? CurrentSituation()
-                    : TotalsThisYear(),
+                ],
               ),
             ),
-          ),
-        ],
+            SizedBox(height: 16), // Adds spacing between tabs and content
+            selectedTab == 'Current Situation'
+                ? CurrentSituation()
+                : TotalsThisYear(),
+            SizedBox(height: 16), // Adds spacing before stages of control
+            StagesOfControl(), // This widget is now included and will appear below the selected tab content
+          ],
+        ),
       ),
     );
   }
@@ -83,6 +81,7 @@ class CurrentSituation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: EdgeInsets.all(16),
@@ -91,11 +90,73 @@ class CurrentSituation extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Colors.red),
           ),
-          child: Text(
-            'Provincial Situation Report:\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. '
-            'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
-            'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            style: TextStyle(fontSize: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Provincial Situation Report:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+                'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
+                'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 16),
+              Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.yellow[100],
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.yellow),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Report a Fire:',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+                    ),
+                    SizedBox(height: 8),
+                    RichText(
+                      text: TextSpan(
+                        text: '• To report a forest fire, call ',
+                        style: TextStyle(fontSize: 16, color: Colors.black), // Normal text style
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '310-FIRE (3473)',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black), // Bold and black for 310-FIRE
+                          ),
+                          TextSpan(
+                            text: '.',
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    RichText(
+                      text: TextSpan(
+                        text: '• South of the French and Mattawa rivers, please call ',
+                        style: TextStyle(fontSize: 16, color: Colors.black), // Normal text style
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '911',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black), // Bold and black for 911
+                          ),
+                          TextSpan(
+                            text: '.',
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(height: 16),
@@ -176,7 +237,7 @@ class SummaryWidgets extends StatelessWidget {
           icon: Icons.local_fire_department,
           title: 'Active Wildfires',
           number: 5,
-          color: Colors.orange,
+          color: const Color.fromARGB(255, 224, 150, 0),
         ),
         SizedBox(height: 10),
         SummaryCard(
@@ -313,6 +374,95 @@ class CauseBox extends StatelessWidget {
           Text(
             '$number (${percentage}%)',
             style: TextStyle(fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StagesOfControl extends StatelessWidget {
+  final List<Map<String, dynamic>> stages = [
+    {'title': 'Out of Control', 'count': 2, 'total': 5, 'color': Colors.red},
+    {'title': 'Being Held', 'count': 1, 'total': 5, 'color': Colors.orange},
+    {'title': 'Under Control', 'count': 1, 'total': 5, 'color': Colors.green},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Stages of Control',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 16),
+          ...stages.map((stage) {
+            final percentage = (stage['count'] / stage['total']) * 100;
+
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey),
+              ),
+              child: Row(
+                children: [
+                  CircularPercentageIndicator(
+                    percentage: percentage,
+                    color: stage['color'],
+                  ),
+                  SizedBox(width: 16),
+                  Text(
+                    stage['title'],
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ],
+      ),
+    );
+  }
+}
+
+class CircularPercentageIndicator extends StatelessWidget {
+  final double percentage;
+  final Color color;
+
+  CircularPercentageIndicator({
+    required this.percentage,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 60,
+      height: 60,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CircularProgressIndicator(
+            value: percentage / 100,
+            strokeWidth: 6,
+            backgroundColor: Colors.grey[200]!,
+            color: color,
+          ),
+          Text(
+            '${percentage.toStringAsFixed(0)}%',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],
       ),
