@@ -22,6 +22,7 @@ class OntarioWildfireDashboard extends StatefulWidget {
 
 class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
   String selectedTab = 'Current Situation';
+  String selectedRegion = 'NorthEast'; // Default to NorthEast image
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +66,60 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
               ),
             ),
             SizedBox(height: 16), // Adds spacing between tabs and content
-            selectedTab == 'Current Situation'
-                ? CurrentSituation()
-                : TotalsThisYear(),
-            SizedBox(height: 16), // Adds spacing before stages of control
-            StagesOfControl(), // This widget is now included and will appear below the selected tab content
+            if (selectedTab == 'Current Situation') ...[
+              CurrentSituation(),
+              SizedBox(height: 16),
+
+              // Fire Weather Map Section
+              Text(
+                'Fire Weather Map for Today',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedRegion = 'NorthEast'; // Change to NorthEast image
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: selectedRegion == 'NorthEast' ? Colors.blue : Colors.grey,
+                    ),
+                    child: Text('NorthEast'),
+                  ),
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedRegion = 'NorthWest'; // Change to NorthWest image
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: selectedRegion == 'NorthWest' ? Colors.blue : Colors.grey,
+                    ),
+                    child: Text('NorthWest'),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+
+              // Display the correct image based on the selected button
+              Image.asset(
+                selectedRegion == 'NorthEast' ? 'assets/images/northeast.jpg' : 'assets/images/northwest.jpg',
+                height: 450,
+                width: double.infinity,
+                fit: BoxFit.fitHeight,
+              ),
+              SizedBox(height: 16),
+
+              // Stages of Control section
+              StagesOfControl(),
+            ] else if (selectedTab == 'Totals This Year') ...[
+              TotalsThisYear(),
+            ],
           ],
         ),
       ),
@@ -469,3 +519,5 @@ class CircularPercentageIndicator extends StatelessWidget {
     );
   }
 }
+
+

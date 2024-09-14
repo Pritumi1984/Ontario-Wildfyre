@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  url_launcher: ^6.1.7
 
   font_awesome_flutter: ^10.2.1  # Keep this only once
 
@@ -25,3 +26,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/northeast.jpg
+    - assets/images/northwest.jpg
