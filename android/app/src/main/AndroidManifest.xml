@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="htn_flutter"
+        android:label="flutter_application_1"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB7khK4zazShclD_DBa4_mwNl2hSyUvfLg" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
