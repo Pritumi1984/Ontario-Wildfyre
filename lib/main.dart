@@ -296,7 +296,6 @@ class OntarioWildfireDashboard extends StatefulWidget {
   OntarioWildfireDashboardState createState() =>
       OntarioWildfireDashboardState();
 }
-
 class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
   String selectedTab = 'Current Situation';
   String selectedRegion = 'NorthEast'; // Default to NorthEast image
@@ -347,8 +346,7 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
           ],
         ),
         centerTitle: true,
-        backgroundColor:
-            Colors.transparent, // Transparent background to show gradient
+        backgroundColor: Colors.transparent, // Transparent background to show gradient
         elevation: 0, // Remove shadow/elevation to focus on the gradient
       ),
       body: SingleChildScrollView(
@@ -537,6 +535,7 @@ class CurrentSituation extends StatelessWidget {
                 ),
               ),
 
+              
               SizedBox(height: 16),
 
               // The Report a Fire section
@@ -565,9 +564,8 @@ class CurrentSituation extends StatelessWidget {
                         children: <TextSpan>[
                           TextSpan(
                             text: '310-FIRE (3473)',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
+
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                           TextSpan(
                             text: '.',
@@ -579,15 +577,14 @@ class CurrentSituation extends StatelessWidget {
                     SizedBox(height: 4),
                     RichText(
                       text: TextSpan(
-                        text:
-                            '• South of the French and Mattawa rivers, please call ',
+
+                        text: '• South of the French and Mattawa rivers, please call ',
                         style: TextStyle(fontSize: 16, color: Colors.black),
                         children: <TextSpan>[
                           TextSpan(
                             text: '911',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
+
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                           TextSpan(
                             text: '.',
@@ -613,8 +610,8 @@ class TotalsThisYear extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.all(16.0), // Add padding around the entire widget
+
+      padding: const EdgeInsets.all(16.0), // Add padding around the entire widget
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -661,8 +658,7 @@ class TotalsThisYear extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Padding(
-            padding: const EdgeInsets.only(
-                left: 8.0), // Add padding to the left of the heading
+            padding: const EdgeInsets.only(left: 8.0), // Add padding to the left of the heading
             child: Text(
               'Wildfire Causes',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -707,6 +703,7 @@ class TotalsThisYear extends StatelessWidget {
     );
   }
 }
+
 
 class SummaryWidgets extends StatelessWidget {
   @override
@@ -853,8 +850,8 @@ class CauseBox extends StatelessWidget {
           SizedBox(height: 8),
           Text(
             '(${percentage}%)',
-            style: TextStyle(
-                fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold),
+
+            style: TextStyle(fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold),
           ),
         ],
       ),
