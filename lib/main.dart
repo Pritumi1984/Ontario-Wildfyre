@@ -28,8 +28,50 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ontario Wildfire Dashboard'),
+        // Use a gradient background for the AppBar
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.redAccent, Colors.orangeAccent],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.fireplace, // Icon to match the wildfire theme
+              color: Colors.white,
+              size: 24, // Reduced icon size
+            ),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Ontario Wildfire Dashboard',
+                style: TextStyle(
+                  fontSize: 20, // Reduced font size
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.2,
+                  shadows: [
+                    Shadow(
+                      blurRadius: 4.0,
+                      color: Colors.black.withOpacity(0.6),
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
+                ),
+                overflow: TextOverflow.ellipsis, // Handle text overflow
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
         centerTitle: true,
+        backgroundColor: Colors.transparent, // Transparent background to show gradient
+        elevation: 0, // Remove shadow/elevation to focus on the gradient
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -50,7 +92,6 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                           ? Colors.red
                           : const Color.fromARGB(255, 252, 181, 181),
                     ),
-                    
                     child: Text(
                       'Current Situation',
                       style: TextStyle(
