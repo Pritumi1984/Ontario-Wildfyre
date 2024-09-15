@@ -1,0 +1,154 @@
+{
+    "places": [
+        {"geometry": "X: -10182316.7691094, Y: 6245288.65190802, Z: NaN", "name": "FOR013", "id": "FOR013", "size": 0.1, "address": "Fort Frances", "Status": "Being Observed", "Date Started": "2024-09-13T23:22:00.0000000", "lat": 48.59988, "lng": -93.4003, "severity": "medium"},
+        {"geometry": "X: -10121480.6432836, Y: 6195133.72628755, Z: NaN", "name": "THU015", "id": "THU015", "size": 4.2, "address": "Thunder Bay", "Status": "Being Held", "Date Started": "2024-09-13T20:48:00.0000000", "lat": 48.38202, "lng": -89.25018, "severity": "medium"},
+        {"geometry": "X: -9304439.93878088, Y: 7075446.97546347, Z: NaN", "name": "COC040", "id": "COC040", "size": 106.0, "address": "Cochrane", "Status": "Being Observed", "Date Started": "2024-09-09T15:02:00.0000000", "lat": 49.0666664, "lng": -81.0166666, "severity": "medium"},
+        {"geometry": "X: -10134594.1787363, Y: 6978820.32518544, Z: NaN", "name": "SLK036", "id": "SLK036", "size": 0.3, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-09-03T21:31:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -8870037.68741693, Y: 6559335.53556681, Z: NaN", "name": "COC039", "id": "COC039", "size": 10.0, "address": "Cochrane", "Status": "Being Observed", "Date Started": "2024-08-28T15:24:00.0000000", "lat": 49.0666664, "lng": -81.0166666, "severity": "medium"},
+        {"geometry": "X: -9928742.12912003, Y: 7134538.94957421, Z: NaN", "name": "SLK034", "id": "SLK034", "size": 4573.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-26T21:52:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10098882.8854185, Y: 7060378.21274049, Z: NaN", "name": "SLK031", "id": "SLK031", "size": 7.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-18T17:49:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10373675.0367944, Y: 6290572.76317819, Z: NaN", "name": "FOR014", "id": "FOR014", "size": 0.2, "address": "Fort Frances", "Status": "Not Under Control", "Date Started": "2024-09-14T22:37:00.0000000", "lat": 48.59988, "lng": -93.4003, "severity": "high"},
+        {"geometry": "X: -10019823.7463008, Y: 6979338.01068433, Z: NaN", "name": "SLK039", "id": "SLK039", "size": 1.8, "address": "Sioux Lookout", "Status": "Not Under Control", "Date Started": "2024-09-14T21:40:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "high"},
+        {"geometry": "X: -10499187.8771045, Y: 6879695.60549246, Z: NaN", "name": "RED046", "id": "RED046", "size": 0.5, "address": "Red Lake", "Status": "Being Observed", "Date Started": "2024-09-14T20:18:00.0000000", "lat": 51.01676, "lng": -93.83374, "severity": "medium"},
+        {"geometry": "X: -10272830.7281305, Y: 6686917.69019636, Z: NaN", "name": "RED045", "id": "RED045", "size": 0.1, "address": "Red Lake", "Status": "Under Control", "Date Started": "2024-09-14T15:52:00.0000000", "lat": 51.01676, "lng": -93.83374, "severity": "low"},
+        {"geometry": "X: -9001060.76545436, Y: 6472191.26010379, Z: NaN", "name": "COC035", "id": "COC035", "size": 69.0, "address": "Cochrane", "Status": "Being Observed", "Date Started": "2024-08-17T21:07:00.0000000", "lat": 49.0666664, "lng": -81.0166666, "severity": "medium"},
+        {"geometry": "X: -9306098.50618005, Y: 6139442.43345834, Z: NaN", "name": "CHA008", "id": "CHA008", "size": 0.2, "address": "Chapleau", "Status": "Being Observed", "Date Started": "2024-08-15T23:59:00.0000000", "lat": 47.83333, "lng": -83.3999984, "severity": "medium"},
+        {"geometry": "X: -9816320.53284319, Y: 7099135.95945837, Z: NaN", "name": "NIP032", "id": "NIP032", "size": 448.0, "address": "Nipigon", "Status": "Being Observed", "Date Started": "2024-08-15T21:44:00.0000000", "lat": 49.83333, "lng": -88.499998, "severity": "medium"},
+        {"geometry": "X: -10221868.7070981, Y: 7118228.5816366, Z: NaN", "name": "SLK030", "id": "SLK030", "size": 727.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-14T21:29:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -9399117.14539256, Y: 6580658.63549755, Z: NaN", "name": "COC029", "id": "COC029", "size": 5.0, "address": "Cochrane", "Status": "Being Observed", "Date Started": "2024-08-07T19:28:00.0000000", "lat": 49.0666664, "lng": -81.0166666, "severity": "medium"},
+        {"geometry": "X: -9348611.46529965, Y: 6477908.67753475, Z: NaN", "name": "HEA010", "id":"HEA010", "size": 0.1, "address": "Hearst", "Status": "Being Observed", "Date Started": "2024-08-07T19:15:00.0000000", "lat": 49.6999972, "lng": -83.666664, "severity": "medium"},
+        {"geometry": "X: -9813036.60338104, Y: 7072733.93955123, Z: NaN", "name": "NIP029", "id": "NIP029", "size": 1760.6, "address": "Nipigon", "Status": "Being Observed", "Date Started": "2024-08-06T19:09:00.0000000", "lat": 49.83333, "lng": -88.499998, "severity": "medium"},
+        {"geometry": "X: -9482083.6207963, Y: 6870297.0932598, Z: NaN", "name": "COC028", "id": "COC028", "size": 53.4, "address": "Cochrane", "Status": "Being Observed", "Date Started": "2024-08-06T15:43:00.0000000", "lat": 49.0666664, "lng": -81.0166666, "severity": "medium"},
+        {"geometry": "X: -10480141.117611, Y: 6959376.48011069, Z: NaN", "name": "RED032",  "id": "RED032", "size": 754.8, "address": "Red Lake", "Status": "Being Observed", "Date Started": "2024-08-05T18:50:00.0000000", "lat": 51.01676, "lng": -93.83374, "severity": "medium"},
+        {"geometry": "X: -9844094.73609804, Y: 6948686.93609267, Z: NaN", "name": "NIP027",  "id": "NIP027", "size": 17820.0, "address": "Nipigon", "Status": "Being Observed", "Date Started": "2024-08-04T20:54:00.0000000", "lat": 49.83333, "lng": -88.499998, "severity": "medium"},
+        {"geometry": "X: -10093773.3055925, Y: 6959339.64823197, Z: NaN", "name": "SLK028",  "id": "SLK028", "size": 372.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-04T18:22:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10553233.5140978, Y: 6932146.06596834, Z: NaN", "name": "RED027",  "id": "RED027", "size": 1920.9, "address": "Red Lake", "Status": "Being Observed", "Date Started": "2024-08-03T20:58:00.0000000", "lat": 51.01676, "lng": -93.83374, "severity": "medium"},
+        {"geometry": "X: -9003097.87312761, Y: 5995828.09369211, Z: NaN", "name": "KLK005",  "id": "KLK005", "size": 889.0, "address": "Kirkland Lake", "Status": "Under Control", "Date Started": "2024-08-03T20:46:00.0000000", "lat": 48.14461, "lng": -80.03767, "severity": "low"},
+        {"geometry": "X: -9934052.05640023, Y: 7026252.38396517, Z: NaN", "name": "SLK027",  "id": "SLK027", "size": 1968.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-03T01:50:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10184665.7227301, Y: 7129713.8817216, Z: NaN", "name": "SLK024",  "id": "SLK024", "size": 319.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-02T01:13:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10184955.1628862, Y: 7196052.02512333, Z: NaN", "name": "SLK023",  "id": "SLK023", "size": 355.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-02T01:12:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10186825.3287185, Y: 7180391.64611854, Z: NaN", "name": "SLK022",  "id": "SLK022", "size": 3131.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-02T01:08:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10013222.5233357, Y: 7166768.75465264, Z: NaN", "name": "SLK021",  "id": "SLK021", "size": 767.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-02T01:05:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10129072.7491152, Y: 7117833.49607009, Z: NaN", "name": "SLK020",  "id": "SLK020", "size": 1587.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-08-02T01:04:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10450786.1753539, Y: 7074866.7333629, Z: NaN", "name": "RED014",  "id": "RED014", "size": 18704.7, "address": "Red Lake", "Status": "Being Observed", "Date Started": "2024-07-30T21:58:00.0000000", "lat": 51.01676, "lng": -93.83374, "severity": "medium"},
+        {"geometry": "X: -9926159.52582399, Y: 7207461.03017478, Z: NaN", "name": "COC027",  "id": "COC027", "size": 0.1, "address": "Cochrane", "Status": "Being Observed", "Date Started": "2024-07-30T13:21:00.0000000", "lat": 49.0666664, "lng": -81.0166666, "severity": "medium"},
+        {"geometry": "X: -10091268.6620754, Y: 7292810.56715404, Z: NaN", "name": "SLK016",  "id": "SLK016", "size": 1969.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-07-30T13:18:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10158449.9878678, Y: 7227600.15656458, Z: NaN", "name": "SLK015",  "id": "SLK015", "size": 950.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-07-30T13:16:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10518746.7341837, Y: 6994716.95172518, Z: NaN", "name": "RED011",  "id": "RED011", "size": 115.6, "address": "Red Lake", "Status": "Being Observed", "Date Started": "2024-07-29T23:10:00.0000000", "lat": 51.01676, "lng": -93.83374, "severity": "medium"},
+        {"geometry": "X: -10068949.0486599, Y: 6941102.24573009, Z: NaN", "name": "SLK014",  "id": "SLK014", "size": 773.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-07-28T22:30:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"},
+        {"geometry": "X: -10104805.0730816, Y: 6977119.64884171, Z: NaN", "name": "SLK012",  "id": "SLK012", "size": 1270.0, "address": "Sioux Lookout", "Status": "Being Observed", "Date Started": "2024-07-22T16:12:00.0000000", "lat": 50.097832, "lng": -91.922035, "severity": "medium"}
+    ],
+    
+    "locations": [
+        
+        {
+            "coords": {
+                "lat": 43.651070,
+                "lng": -79.347015
+            },
+            "id": "downtown-toronto",
+            "name": "Downtown Toronto",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 48.59988,
+                "lng": -93.4003
+            },
+            "id": "fort-frances",
+            "name": "Fort Frances",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 50.097832,
+                "lng": -91.922035
+            },
+            "id": "sioux_lookout",
+            "name": "Sioux Lookout",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 49.0666664,
+                "lng": -49.0666664
+            },
+            "id": "cochranee",
+            "name": "Cochrane",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 49.83333,
+                "lng": -88.499998
+            },
+            "id": "nipigon",
+            "name": "Nipigon",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 51.01676,
+                "lng": -93.83374
+            },
+            "id": "red_lake",
+            "name": "Red Lake",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 48.14461,
+                "lng": -80.03767
+            },
+            "id": "kirkland_lake",
+            "name": "Kirkland Lake",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 48.38202,
+                "lng": -89.25018
+            },
+            "id": "thunder_bay",
+            "name": "Thunder Bay",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 43.775486,
+                "lng": -79.257755
+            },
+            "id": "scarborough",
+            "name": "Scarborough",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 43.761539,
+                "lng": -79.411079
+            },
+            "id": "north-york",
+            "name": "North York",
+            "zoom": 4
+        },
+        {
+            "coords": {
+                "lat":  43.643467,
+                "lng": -79.565818
+            },
+            "id": "etobicoke",
+            "name": "Etobicoke",
+            "zoom": 3
+        },
+        {
+            "coords": {
+                "lat": 43.689619,
+                "lng": -79.479189
+            },
+            "id": "york",
+            "name": "York",
+            "zoom": 4
+        }
+    ]
+  }
+

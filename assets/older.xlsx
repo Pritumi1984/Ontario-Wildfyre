@@ -1,0 +1,65 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!--============================================================-->
+<!-- Geocortex Essentials REST Elements -->
+<!-- VERSION: 4.14.5.0 -->
+<!-- Copyright 2024, Latitude Geographics Group, Ltd. All Rights Reserved.-->
+<!--============================================================-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="ctl00_Head1"><title>
+	Geocortex Essentials Sites Directory
+</title><meta http-equiv="X-UA-Compatible" content="IE=edge" /><link rel="Stylesheet" href="../WebResources/Css/WebDirectory.css" />
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="../WebResources/Images/favicon.ico" /></head>
+<body>
+    <div>
+        <table width="100%" id="userTable">
+            <tr>
+                <td id="titlecell">
+                    Geocortex Essentials Sites Directory
+                </td>
+                <td id="security" align="right" class="guest">
+                    <a class="guest" href="https://www.lioapplications.lrc.gov.on.ca/Geocortex/Essentials/essentials414/REST/security/signIn">Sign In</a>
+                    <a class="user" href="https://www.lioapplications.lrc.gov.on.ca/Geocortex/Essentials/essentials414/REST/security/signOut">Sign Out</a>
+                    <span class="identity">( <a href="../security/userInfo">Guest</a> )</span>
+                </td>
+            </tr>
+        </table>
+        <table id="navTable" width="100%">
+            <tbody>
+                <tr valign="top">
+                    <td id="breadcrumbs">
+                        <div id="ctl00_Breadcrumbs">
+	
+                        
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="restHeader">
+            <h2>
+                <span>Error</span>
+            </h2>
+        </div>
+        <div class="restBody">
+            
+    <div>
+        
+            Unable to find the specified file. <br />
+        
+        
+    </div>
+
+            <br />
+            <br />
+            
+                <b>Supported Interfaces:</b>&nbsp;&nbsp;<a id="ctl00_RestInterfaceLink" href="https://www.lioapplications.lrc.gov.on.ca/Geocortex/Essentials/essentials414/REST/TempFiles/Export.xlsx?guid=85fc1563-be70-4eec-a548-556f23b46e41&amp;contentType=application%2fvnd.openxmlformats-officedocument.spreadsheetml.sheet&amp;f=pjson" target="_blank">REST</a><br />
+                <br />
+            
+        </div>
+    </div>
+</body>
+</html>

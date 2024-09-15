@@ -1,20 +1,296 @@
 import 'package:flutter/material.dart';
+import 'package:dart_openai/dart_openai.dart';
+import 'env/env.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'src/locations.dart' as locations;
+import 'package:custom_info_window/custom_info_window.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  OpenAI.apiKey = Env
+      .apiKey; // Initializes the package with that API key, all methods now are ready for use.
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
+    // return ChangeNotifierProvider(
+    // create: (context) => MyAppState(),
     return MaterialApp(
       title: 'Ontario Wildfire',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        useMaterial3: true,
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 126, 126, 126)),
       ),
-      home: OntarioWildfireDashboard(),
+      home: MyHomePage(),
+    );
+    // );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _currentIndex = 0;
+
+  final List<Widget> _tabs = [
+    OntarioWildfireDashboard(),
+    GeneratorPage(),
+    FireMap(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          //title: Text('Wildfyre'),
+          ),
+      body: _tabs[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fireplace_rounded),
+            label: 'Fire Prediction',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.location_on),
+            label: 'Map',
+          ),
+        ],
+      ),
     );
   }
 }
+
+class GeneratorPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Wildfire Prediction System'),
+      ),
+      body: SingleChildScrollView(
+        // Wrap with SingleChildScrollView for scrolling
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(child: AIimage()), // Display the AI-generated image here
+            SizedBox(height: 20),
+            AIRepsonse(), // Display the AI response widget here
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AIimage extends StatefulWidget {
+  const AIimage({super.key});
+
+  @override
+  State<AIimage> createState() => _AIimageState();
+}
+
+class _AIimageState extends State<AIimage> {
+  String? imageUrl; // This variable will hold the URL of the generated image
+  bool isLoading =
+      false; // A flag to show a loading spinner while generating image
+  String? errorMessage; // To capture any errors during image generation
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> getImage() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null; // Clear any previous errors
+    });
+
+    try {
+      // Assuming you're using OpenAI to generate the image
+      OpenAIImageModel image = await OpenAI.instance.image.create(
+        prompt:
+            "hyperreal forest fire perimeter in Chapleau Ontario in August with flame",
+        n: 1,
+        size: OpenAIImageSize.size256,
+        responseFormat: OpenAIImageResponseFormat.url,
+      );
+
+      // Debug the response to ensure it's correct
+      print('API response: ${image.data}');
+
+      setState(() {
+        // Retrieve the first generated image URL
+        if (image.data.isNotEmpty && image.data[0].url != null) {
+          imageUrl = image.data[0].url; // Extract the valid image URL
+        } else {
+          errorMessage = 'Failed to get a valid image URL';
+        }
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error generating image: $e';
+        isLoading = false;
+      });
+      print('Error: $e'); // Print the error for debugging
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (isLoading)
+          const CircularProgressIndicator(), // Show loading indicator while generating
+        if (errorMessage != null)
+          Text(errorMessage!), // Display error message if there's an error
+        if (imageUrl != null)
+          Image.network(imageUrl!), // Display the image if URL is valid
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: getImage, // Call the getImage function when pressed
+          child: const Text('What would a fire look like today?'),
+        ),
+      ],
+    );
+  }
+}
+
+class AIRepsonse extends StatefulWidget {
+  const AIRepsonse({super.key});
+
+  @override
+  State<AIRepsonse> createState() => _AIRepsonseState();
+}
+
+class _AIRepsonseState extends State<AIRepsonse> {
+  String out = "";
+  bool isLoading = false; // Tracks loading state
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future getOut() async {
+    setState(() {
+      isLoading = true; // Show loading indicator
+    });
+    final systemMessage = OpenAIChatCompletionChoiceMessageModel(
+      content: [
+        OpenAIChatCompletionChoiceMessageContentItemModel.text(
+          "Give a small paragraph predicting the fire spread rate in Chapleau Ontario. The FFMC is 89, the DMC is 19, the DC is 374, the ISI is 4.8, and the BUI is 33. Don't mention the provided values. Write the prediction in metres per minute. Only include spread rate and a small explanation in the answer.",
+        ),
+      ],
+      role: OpenAIChatMessageRole.assistant,
+    );
+
+    final userMessage = OpenAIChatCompletionChoiceMessageModel(
+      content: [
+        OpenAIChatCompletionChoiceMessageContentItemModel.text(
+          "How fast would a fire spread in Chapleau Ontario today?",
+        ),
+      ],
+      role: OpenAIChatMessageRole.user,
+      name: "anas",
+    );
+
+    final requestMessages = [
+      systemMessage,
+      userMessage,
+    ];
+
+    OpenAIChatCompletionModel chatCompletion =
+        await OpenAI.instance.chat.create(
+      model: "gpt-4o",
+      //responseFormat: {"type": 'json_object'},
+      seed: 6,
+      messages: requestMessages,
+      temperature: 0.2,
+      maxTokens: 500,
+    );
+
+    setState(() {
+      out = chatCompletion.choices[0].message.content.toString();
+      isLoading = false; // Hide loading indicator
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding:
+            const EdgeInsets.all(16.0), // Adds padding to the entire widget
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          // Button to trigger the API call
+          ElevatedButton.icon(
+            onPressed: getOut, // Call getOut on button press
+            icon: const Icon(Icons.chat),
+            label: const Text('Generate Prediction'),
+            style: ElevatedButton.styleFrom(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+              textStyle: const TextStyle(fontSize: 18),
+            ),
+          ),
+
+          const SizedBox(
+              height: 20), // Adds spacing between the button and response
+
+          // Show loading indicator while waiting for API response
+          if (isLoading)
+            const CircularProgressIndicator()
+          else
+            // Show the response or error message in a styled container
+            out.isNotEmpty
+                ? Card(
+                    elevation: 4, // Add elevation for a shadow effect
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    margin: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        out, // Display the API response
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                : const Text(
+                    'Press the button to generate a prediction',
+                    style: TextStyle(fontSize: 18),
+                  )
+        ]));
+  }
+}
+
 class OntarioWildfireDashboard extends StatefulWidget {
   @override
   OntarioWildfireDashboardState createState() =>
@@ -29,8 +305,51 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ontario Wildfire Dashboard'),
+        // Use a gradient background for the AppBar
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.redAccent, Colors.orangeAccent],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.fireplace, // Icon to match the wildfire theme
+              color: Colors.white,
+              size: 24, // Reduced icon size
+            ),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Ontario Wildfire Dashboard',
+                style: TextStyle(
+                  fontSize: 20, // Reduced font size
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.2,
+                  shadows: [
+                    Shadow(
+                      blurRadius: 4.0,
+                      color: Colors.black.withOpacity(0.6),
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
+                ),
+                overflow: TextOverflow.ellipsis, // Handle text overflow
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
         centerTitle: true,
+        backgroundColor:
+            Colors.transparent, // Transparent background to show gradient
+        elevation: 0, // Remove shadow/elevation to focus on the gradient
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -49,9 +368,15 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: selectedTab == 'Current Situation'
                           ? Colors.red
-                          : Colors.grey,
+                          : const Color.fromARGB(255, 252, 181, 181),
                     ),
-                    child: Text('Current Situation'),
+                    child: Text(
+                      'Current Situation',
+                      style: TextStyle(
+                        color: Colors.black, // Set text color to black
+                        fontWeight: FontWeight.bold, // Make text bold
+                      ),
+                    ),
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
@@ -63,9 +388,15 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: selectedTab == 'Totals This Year'
                           ? Colors.red
-                          : Colors.grey,
+                          : Color.fromARGB(255, 252, 181, 181),
                     ),
-                    child: Text('Totals This Year'),
+                    child: Text(
+                      'Totals This Year',
+                      style: TextStyle(
+                        color: Colors.black, // Set text color to black
+                        fontWeight: FontWeight.bold, // Make text bold
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -90,29 +421,43 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        selectedRegion = 'NorthEast'; // Change to NorthEast image
+                        selectedRegion =
+                            'NorthEast'; // Change to NorthEast image
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: selectedRegion == 'NorthEast'
                           ? Colors.blue
-                          : Colors.grey,
+                          : const Color.fromARGB(255, 180, 221, 255),
                     ),
-                    child: Text('NorthEast'),
+                    child: Text(
+                      'NorthEast',
+                      style: TextStyle(
+                        color: Colors.black, // Set text color to black
+                        fontWeight: FontWeight.bold, // Make text bold
+                      ),
+                    ),
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        selectedRegion = 'NorthWest'; // Change to NorthWest image
+                        selectedRegion =
+                            'NorthWest'; // Change to NorthWest image
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: selectedRegion == 'NorthWest'
                           ? Colors.blue
-                          : Colors.grey,
+                          : const Color.fromARGB(255, 180, 221, 255),
                     ),
-                    child: Text('NorthWest'),
+                    child: Text(
+                      'NorthWest',
+                      style: TextStyle(
+                        color: Colors.black, // Set text color to black
+                        fontWeight: FontWeight.bold, // Make text bold
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -168,13 +513,33 @@ class CurrentSituation extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
-              Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
-                'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                style: TextStyle(fontSize: 16),
+
+              // Wrapping this section in a SingleChildScrollView to make it scrollable
+              Container(
+                height: 200, // Set the height for the scrollable section
+                child: SingleChildScrollView(
+                  child: Text(
+                    'Northeast Region:\n'
+                    '• No new wildland fires confirmed on September 14.\n'
+                    '• 9 active fires: 1 under control, 8 being observed.\n'
+                    '• Moderate to high fire hazard across the region.\n'
+                    '• Fort Frances 13 (0.1 ha) is being observed.\n\n'
+                    'Northwest Region:\n'
+                    '• 4 new wildland fires confirmed on September 14:\n'
+                    '   - Red Lake 45 (0.1 ha) under control.\n'
+                    '   - Red Lake 46 (0.5 ha) being observed.\n'
+                    '   - Sioux Lookout 39 (1.8 ha) not under control.\n'
+                    '   - Fort Frances 14 (0.2 ha) not under control.\n'
+                    '• 28 active fires: 2 not under control, 1 being held, 1 under control, 24 observed.\n'
+                    '• Moderate to high fire hazard with extreme pockets near Red Lake and Sioux Lookout.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ),
+
               SizedBox(height: 16),
+
+              // The Report a Fire section
               Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -187,17 +552,22 @@ class CurrentSituation extends StatelessWidget {
                   children: [
                     Text(
                       'Report a Fire:',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
                     ),
                     SizedBox(height: 8),
                     RichText(
                       text: TextSpan(
                         text: '• To report a forest fire, call ',
-                        style: TextStyle(fontSize: 16, color: Colors.black), // Normal text style
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                         children: <TextSpan>[
                           TextSpan(
                             text: '310-FIRE (3473)',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black), // Bold and black for 310-FIRE
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                           TextSpan(
                             text: '.',
@@ -209,12 +579,15 @@ class CurrentSituation extends StatelessWidget {
                     SizedBox(height: 4),
                     RichText(
                       text: TextSpan(
-                        text: '• South of the French and Mattawa rivers, please call ',
-                        style: TextStyle(fontSize: 16, color: Colors.black), // Normal text style
+                        text:
+                            '• South of the French and Mattawa rivers, please call ',
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                         children: <TextSpan>[
                           TextSpan(
                             text: '911',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black), // Bold and black for 911
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                           TextSpan(
                             text: '.',
@@ -239,61 +612,98 @@ class CurrentSituation extends StatelessWidget {
 class TotalsThisYear extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Totals for the year refers to wildfire activity between April 1, 2024, and today\'s date.',
-          style: TextStyle(fontSize: 16),
-        ),
-        SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            StatsBox(
-              icon: Icons.local_fire_department,
-              title: 'Wildfires Started',
-              number: 50,
+    return Padding(
+      padding:
+          const EdgeInsets.all(16.0), // Add padding around the entire widget
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Totals for the year refers to wildfire activity between April 1, 2024, and today\'s date.',
+            style: TextStyle(fontSize: 16),
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: StatsBox(
+                    icon: Icons.local_fire_department,
+                    title: 'Wildfires Started',
+                    number: 50,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16), // Space between boxes
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: StatsBox(
+                    icon: Icons.nature_people,
+                    title: 'Hectares Burned',
+                    number: 1200,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16), // Space between boxes
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: StatsBox(
+                    icon: Icons.check_circle_outline,
+                    title: 'Extinguished Wildfires',
+                    number: 45,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 8.0), // Add padding to the left of the heading
+            child: Text(
+              'Wildfire Causes',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            StatsBox(
-              icon: Icons.nature_people,
-              title: 'Hectares Burned',
-              number: 1200,
-            ),
-            StatsBox(
-              icon: Icons.check_circle_outline,
-              title: 'Extinguished Wildfires',
-              number: 45,
-            ),
-          ],
-        ),
-        SizedBox(height: 16),
-        Text(
-          'Wildfire Causes',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            CauseBox(
-              title: 'Lightning',
-              number: 25,
-              percentage: 50,
-            ),
-            CauseBox(
-              title: 'Human',
-              number: 15,
-              percentage: 30,
-            ),
-            CauseBox(
-              title: 'Undetermined',
-              number: 10,
-              percentage: 20,
-            ),
-          ],
-        ),
-      ],
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CauseBox(
+                    title: 'Lightning',
+                    percentage: 50,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16), // Space between boxes
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CauseBox(
+                    title: 'Human',
+                    percentage: 30,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16), // Space between boxes
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CauseBox(
+                    title: 'Undetermined',
+                    percentage: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -364,7 +774,8 @@ class SummaryCard extends StatelessWidget {
         ),
         subtitle: Text(
           number.toString(),
-          style: TextStyle(fontSize: 24, color: color, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 24, color: color, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -404,7 +815,8 @@ class StatsBox extends StatelessWidget {
           SizedBox(height: 8),
           Text(
             number.toString(),
-            style: TextStyle(fontSize: 24, color: Colors.blue, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 24, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -414,12 +826,10 @@ class StatsBox extends StatelessWidget {
 
 class CauseBox extends StatelessWidget {
   final String title;
-  final int number;
   final int percentage;
 
   CauseBox({
     required this.title,
-    required this.number,
     required this.percentage,
   });
 
@@ -442,8 +852,9 @@ class CauseBox extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Text(
-            '$number (${percentage}%)',
-            style: TextStyle(fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold),
+            '(${percentage}%)',
+            style: TextStyle(
+                fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -618,5 +1029,115 @@ class ContactInformation extends StatelessWidget {
   }
 }
 
+class FireMap extends StatefulWidget {
+  const FireMap({super.key});
 
+  @override
+  State<FireMap> createState() => _FireMapState();
+}
 
+class _FireMapState extends State<FireMap> {
+  // late GoogleMapController mapController;
+
+  // final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(50.000000, -85.000000);
+
+  // void _onMapCreated(GoogleMapController controller) {
+  //   mapController = controller;
+  // }
+  static List<LatLng> _getOntarioBoundary() {
+    return [
+      const LatLng(56.812444, -89.066491),
+      const LatLng(52.895138, -95.262780),
+      // const LatLng(57.597881, -96.053796), // Northern Ontario const boundary sample coordinates
+      const LatLng(49.252913, -96.053796),
+      const LatLng(41.721499, -83.002038),
+      const LatLng(45.382425, -74.344811),
+      const LatLng(47.915775, -79.486413),
+      const LatLng(55.014941, -82.474694),
+    ];
+  }
+
+  final Map<String, Marker> _markers = {};
+  Future<void> _onMapCreated(GoogleMapController controller) async {
+    final fireLocations = await locations.getFireLocations();
+
+    final BitmapDescriptor high = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(10, 10)),
+      'assets/red_fire.png',
+    );
+    final BitmapDescriptor medium = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(10, 10)),
+      'assets/yellow_fire.png',
+    );
+    final BitmapDescriptor low = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(
+        size: Size(10, 10),
+      ),
+      'assets/green_fire.png',
+    );
+    //final CustomInfoWindowController _customInfoWindowController =
+    CustomInfoWindowController();
+
+    setState(() {
+      _markers.clear();
+
+      for (final place in fireLocations.places) {
+        final severity = place.severity;
+        BitmapDescriptor markerIcon;
+
+        // Set the marker icon based on severity level
+        if (severity == 'high') {
+          markerIcon = high;
+        } else if (severity == 'medium') {
+          markerIcon = medium;
+        } else {
+          markerIcon = low;
+        }
+        final marker = Marker(
+          markerId: MarkerId(place.name),
+          position: LatLng(place.lat, place.lng),
+          infoWindow: InfoWindow(
+            title: place.name,
+            snippet:
+                "${place.address} now has a total of ${place.size} burnt hectares",
+          ),
+          icon: markerIcon,
+        );
+
+        _markers[place.name] = marker;
+      }
+    });
+  }
+
+  final Set<Polygon> ontBound = {
+    Polygon(
+      polygonId: const PolygonId('ontario_boundary'),
+      strokeColor: Colors.black,
+      // points: ont_bound.getOntarioBoundary(),
+      points: _getOntarioBoundary(),
+      strokeWidth: 3,
+      fillColor: Colors.black.withOpacity(0.0), // Fill color with transparency
+    ),
+  };
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Current Fires'),
+        elevation: 2,
+      ),
+      body: GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: _center,
+          // target: LatLng(0, 0),
+          zoom: 4.5,
+        ),
+        polygons: ontBound,
+        markers: _markers.values.toSet(),
+      ),
+    );
+    // );
+  }
+}
