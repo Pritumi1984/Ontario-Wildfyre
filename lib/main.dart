@@ -5,6 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'src/locations.dart' as locations;
 import 'package:custom_info_window/custom_info_window.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 Future<void> main() async {
   OpenAI.apiKey = Env
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 126, 126, 126)),
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 48, 44, 44)),
       ),
       home: MyHomePage(),
     );
@@ -45,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
     OntarioWildfireDashboard(),
     GeneratorPage(),
     FireMap(),
+    ChatScreen(),
   ];
 
   @override
@@ -64,15 +67,23 @@ class _MyHomePageState extends State<MyHomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
+            backgroundColor: const Color.fromARGB(255, 115, 115, 115),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.fireplace_rounded),
+            backgroundColor: const Color.fromARGB(255, 115, 115, 115),
             label: 'Fire Prediction',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.location_on),
+            backgroundColor: const Color.fromARGB(255, 115, 115, 115),
             label: 'Map',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            backgroundColor: const Color.fromARGB(255, 115, 115, 115),
+            label: 'Chat',
           ),
         ],
       ),
@@ -1139,5 +1150,137 @@ class _FireMapState extends State<FireMap> {
       ),
     );
     // );
+  }
+}
+
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
+
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  final List<Map<String, String>> messages = [];
+  final TextEditingController controller = TextEditingController();
+  bool isLoading = false;
+
+  Future<void> sendMessage(String message) async {
+    setState(() {
+      messages.add({'user': message});
+      isLoading = true;
+    });
+
+    // Send the message to Cohere API
+    final response = await fetchChatbotResponse(message);
+
+    setState(() {
+      messages.add({'bot': response});
+      isLoading = false;
+    });
+
+    controller.clear();
+  }
+
+  Future<String> fetchChatbotResponse(String message) async {
+    const String apiUrl = 'https://api.cohere.com/v1/chat';
+    const String apiKey = 'IipOeG53tNhDWNkwdVKclTskphavmKbb6THPCoYM';
+    // const String apiKey = '2JREX8NhQgS4pnfDiflmmSRUQMk2wNcFqZrGjbu1';
+
+    final Map<String, dynamic> requestBody = {
+      "model": "8546942c-3f79-49a7-b13f-689a8a096129-ft",
+      "message": message,
+      "temperature": 0.3,
+      "chat_history": [
+        {"role": "User", "message": "How can I prepare for a wildfire?"},
+        {
+          "role": "Chatbot",
+          "message":
+              "Evacuate immediately, follow the directions of emergency personnel, and stay informed through local media."
+        }
+      ],
+      "prompt_truncation": "AUTO"
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      // print("------------------------------------------");
+      // print(response.body);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        print(responseData['chat_history'][3]['message']);
+        return responseData['chat_history'][3]
+            ['message']; // Process the response here
+      } else {
+        return 'Failed to get response from Cohere API. Status: ${response.statusCode}';
+      }
+    } catch (e) {
+      return 'Error: $e';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Wildfire Evacuation Assistant'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final message = messages[index];
+                return ListTile(
+                  title: Text(
+                    message.keys.first == 'user'
+                        ? 'You: ${message['user']}'
+                        : 'Bot: ${message['bot']}',
+                    style: TextStyle(
+                      color: message.keys.first == 'user'
+                          ? Colors.blue
+                          : Colors.green,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          if (isLoading) const CircularProgressIndicator(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(
+                      hintText: 'Ask something...',
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () {
+                    if (controller.text.isNotEmpty) {
+                      sendMessage(controller.text);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
