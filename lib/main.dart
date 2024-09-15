@@ -20,7 +20,6 @@ class OntarioWildfireDashboard extends StatefulWidget {
   OntarioWildfireDashboardState createState() =>
       OntarioWildfireDashboardState();
 }
-
 class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
   String selectedTab = 'Current Situation';
   String selectedRegion = 'NorthEast'; // Default to NorthEast image
@@ -49,9 +48,16 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: selectedTab == 'Current Situation'
                           ? Colors.red
-                          : Colors.grey,
+                          : const Color.fromARGB(255, 252, 181, 181),
                     ),
-                    child: Text('Current Situation'),
+                    
+                    child: Text(
+                      'Current Situation',
+                      style: TextStyle(
+                        color: Colors.black, // Set text color to black
+                        fontWeight: FontWeight.bold, // Make text bold
+                      ),
+                    ),
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
@@ -63,9 +69,15 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: selectedTab == 'Totals This Year'
                           ? Colors.red
-                          : Colors.grey,
+                          : Color.fromARGB(255, 252, 181, 181),
                     ),
-                    child: Text('Totals This Year'),
+                    child: Text(
+                      'Totals This Year',
+                      style: TextStyle(
+                        color: Colors.black, // Set text color to black
+                        fontWeight: FontWeight.bold, // Make text bold
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -96,9 +108,15 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: selectedRegion == 'NorthEast'
                           ? Colors.blue
-                          : Colors.grey,
+                          : const Color.fromARGB(255, 180, 221, 255),
                     ),
-                    child: Text('NorthEast'),
+                    child: Text(
+                      'NorthEast',
+                      style: TextStyle(
+                        color: Colors.black, // Set text color to black
+                        fontWeight: FontWeight.bold, // Make text bold
+                      ),
+                    ),
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
@@ -110,9 +128,15 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: selectedRegion == 'NorthWest'
                           ? Colors.blue
-                          : Colors.grey,
+                          : const Color.fromARGB(255, 180, 221, 255),
                     ),
-                    child: Text('NorthWest'),
+                    child: Text(
+                      'NorthWest',
+                      style: TextStyle(
+                        color: Colors.black, // Set text color to black
+                        fontWeight: FontWeight.bold, // Make text bold
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -168,13 +192,33 @@ class CurrentSituation extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
-              Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
-                'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                style: TextStyle(fontSize: 16),
+
+              // Wrapping this section in a SingleChildScrollView to make it scrollable
+              Container(
+                height: 200, // Set the height for the scrollable section
+                child: SingleChildScrollView(
+                  child: Text(
+                    'Northeast Region:\n'
+                    '• No new wildland fires confirmed on September 14.\n'
+                    '• 9 active fires: 1 under control, 8 being observed.\n'
+                    '• Moderate to high fire hazard across the region.\n'
+                    '• Fort Frances 13 (0.1 ha) is being observed.\n\n'
+                    'Northwest Region:\n'
+                    '• 4 new wildland fires confirmed on September 14:\n'
+                    '   - Red Lake 45 (0.1 ha) under control.\n'
+                    '   - Red Lake 46 (0.5 ha) being observed.\n'
+                    '   - Sioux Lookout 39 (1.8 ha) not under control.\n'
+                    '   - Fort Frances 14 (0.2 ha) not under control.\n'
+                    '• 28 active fires: 2 not under control, 1 being held, 1 under control, 24 observed.\n'
+                    '• Moderate to high fire hazard with extreme pockets near Red Lake and Sioux Lookout.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ),
+              
               SizedBox(height: 16),
+
+              // The Report a Fire section
               Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -193,11 +237,11 @@ class CurrentSituation extends StatelessWidget {
                     RichText(
                       text: TextSpan(
                         text: '• To report a forest fire, call ',
-                        style: TextStyle(fontSize: 16, color: Colors.black), // Normal text style
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                         children: <TextSpan>[
                           TextSpan(
                             text: '310-FIRE (3473)',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black), // Bold and black for 310-FIRE
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                           TextSpan(
                             text: '.',
@@ -210,11 +254,11 @@ class CurrentSituation extends StatelessWidget {
                     RichText(
                       text: TextSpan(
                         text: '• South of the French and Mattawa rivers, please call ',
-                        style: TextStyle(fontSize: 16, color: Colors.black), // Normal text style
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                         children: <TextSpan>[
                           TextSpan(
                             text: '911',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black), // Bold and black for 911
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                           TextSpan(
                             text: '.',
@@ -239,64 +283,100 @@ class CurrentSituation extends StatelessWidget {
 class TotalsThisYear extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Totals for the year refers to wildfire activity between April 1, 2024, and today\'s date.',
-          style: TextStyle(fontSize: 16),
-        ),
-        SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            StatsBox(
-              icon: Icons.local_fire_department,
-              title: 'Wildfires Started',
-              number: 50,
+    return Padding(
+      padding: const EdgeInsets.all(16.0), // Add padding around the entire widget
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Totals for the year refers to wildfire activity between April 1, 2024, and today\'s date.',
+            style: TextStyle(fontSize: 16),
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: StatsBox(
+                    icon: Icons.local_fire_department,
+                    title: 'Wildfires Started',
+                    number: 50,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16), // Space between boxes
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: StatsBox(
+                    icon: Icons.nature_people,
+                    title: 'Hectares Burned',
+                    number: 1200,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16), // Space between boxes
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: StatsBox(
+                    icon: Icons.check_circle_outline,
+                    title: 'Extinguished Wildfires',
+                    number: 45,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0), // Add padding to the left of the heading
+            child: Text(
+              'Wildfire Causes',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            StatsBox(
-              icon: Icons.nature_people,
-              title: 'Hectares Burned',
-              number: 1200,
-            ),
-            StatsBox(
-              icon: Icons.check_circle_outline,
-              title: 'Extinguished Wildfires',
-              number: 45,
-            ),
-          ],
-        ),
-        SizedBox(height: 16),
-        Text(
-          'Wildfire Causes',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            CauseBox(
-              title: 'Lightning',
-              number: 25,
-              percentage: 50,
-            ),
-            CauseBox(
-              title: 'Human',
-              number: 15,
-              percentage: 30,
-            ),
-            CauseBox(
-              title: 'Undetermined',
-              number: 10,
-              percentage: 20,
-            ),
-          ],
-        ),
-      ],
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CauseBox(
+                    title: 'Lightning',
+                    percentage: 50,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16), // Space between boxes
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CauseBox(
+                    title: 'Human',
+                    percentage: 30,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16), // Space between boxes
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CauseBox(
+                    title: 'Undetermined',
+                    percentage: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
+
 
 class SummaryWidgets extends StatelessWidget {
   @override
@@ -414,12 +494,10 @@ class StatsBox extends StatelessWidget {
 
 class CauseBox extends StatelessWidget {
   final String title;
-  final int number;
   final int percentage;
 
   CauseBox({
     required this.title,
-    required this.number,
     required this.percentage,
   });
 
@@ -442,7 +520,7 @@ class CauseBox extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Text(
-            '$number (${percentage}%)',
+            '(${percentage}%)',
             style: TextStyle(fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold),
           ),
         ],
