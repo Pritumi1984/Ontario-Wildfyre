@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,10 +15,10 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 class OntarioWildfireDashboard extends StatefulWidget {
   @override
-  OntarioWildfireDashboardState createState() => OntarioWildfireDashboardState();
+  OntarioWildfireDashboardState createState() =>
+      OntarioWildfireDashboardState();
 }
 
 class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
@@ -46,7 +47,9 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: selectedTab == 'Current Situation' ? Colors.red : Colors.grey,
+                      backgroundColor: selectedTab == 'Current Situation'
+                          ? Colors.red
+                          : Colors.grey,
                     ),
                     child: Text('Current Situation'),
                   ),
@@ -58,7 +61,9 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: selectedTab == 'Totals This Year' ? Colors.red : Colors.grey,
+                      backgroundColor: selectedTab == 'Totals This Year'
+                          ? Colors.red
+                          : Colors.grey,
                     ),
                     child: Text('Totals This Year'),
                   ),
@@ -66,8 +71,11 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
               ),
             ),
             SizedBox(height: 16), // Adds spacing between tabs and content
+
             if (selectedTab == 'Current Situation') ...[
+              // Current Situation Section
               CurrentSituation(),
+
               SizedBox(height: 16),
 
               // Fire Weather Map Section
@@ -86,7 +94,9 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: selectedRegion == 'NorthEast' ? Colors.blue : Colors.grey,
+                      backgroundColor: selectedRegion == 'NorthEast'
+                          ? Colors.blue
+                          : Colors.grey,
                     ),
                     child: Text('NorthEast'),
                   ),
@@ -98,7 +108,9 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: selectedRegion == 'NorthWest' ? Colors.blue : Colors.grey,
+                      backgroundColor: selectedRegion == 'NorthWest'
+                          ? Colors.blue
+                          : Colors.grey,
                     ),
                     child: Text('NorthWest'),
                   ),
@@ -108,15 +120,23 @@ class OntarioWildfireDashboardState extends State<OntarioWildfireDashboard> {
 
               // Display the correct image based on the selected button
               Image.asset(
-                selectedRegion == 'NorthEast' ? 'assets/images/northeast.jpg' : 'assets/images/northwest.jpg',
+                selectedRegion == 'NorthEast'
+                    ? 'assets/images/northeast.jpg'
+                    : 'assets/images/northwest.jpg',
                 height: 450,
                 width: double.infinity,
                 fit: BoxFit.fitHeight,
               ),
+
               SizedBox(height: 16),
 
-              // Stages of Control section
+              // Stages of Control Section
               StagesOfControl(),
+
+              SizedBox(height: 16),
+
+              // Contact Information Section
+              ContactInformation(),
             ] else if (selectedTab == 'Totals This Year') ...[
               TotalsThisYear(),
             ],
@@ -519,5 +539,84 @@ class CircularPercentageIndicator extends StatelessWidget {
     );
   }
 }
+
+class ContactInformation extends StatelessWidget {
+  // Method to launch phone dialer
+  void _launchPhoneDialer(String phoneNumber) async {
+    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      print('Could not launch $phoneNumber');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Contact Information Title
+          Text(
+            'Contact Information',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 16),
+
+          // Northeast Region
+          Text(
+            'Northeast Region',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Text('Alison Lake\nFire Information Officer'),
+          SizedBox(height: 8),
+          GestureDetector(
+            onTap: () {
+              _launchPhoneDialer('705-564-6165');
+            },
+            child: Row(
+              children: [
+                Icon(Icons.phone, color: Colors.black),
+                SizedBox(width: 8),
+                Text(
+                  '705-564-6165',
+                  style: TextStyle(fontSize: 16, color: Colors.blue),
+                ),
+              ],
+            ),
+          ),
+
+          SizedBox(height: 16), // Spacing between sections
+
+          // Northwest Region
+          Text(
+            'Northwest Region',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Text('Alison Bezubiak\nFire Information Officer'),
+          SizedBox(height: 8),
+          GestureDetector(
+            onTap: () {
+              _launchPhoneDialer('807-937-7330');
+            },
+            child: Row(
+              children: [
+                Icon(Icons.phone, color: Colors.black),
+                SizedBox(width: 8),
+                Text(
+                  '807-937-7330',
+                  style: TextStyle(fontSize: 16, color: Colors.blue),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 
