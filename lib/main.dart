@@ -1127,6 +1127,7 @@ class _FireMapState extends State<FireMap> {
       strokeWidth: 3,
       fillColor: Colors.black.withOpacity(0.0), // Fill color with transparency
     ),
+    
   };
   @override
   Widget build(BuildContext context) {
